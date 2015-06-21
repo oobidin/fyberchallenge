@@ -44,6 +44,11 @@ window._ = {
 	fade: function() {
 		
 	},
+	/*formats: {
+		date: function(date) {
+			return;
+		}
+	},*/
 	ajax: function(url, opts, done) {
 		function getXmlHttp() {
 		  var xmlhttp;
