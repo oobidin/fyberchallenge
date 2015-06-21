@@ -1,0 +1,105 @@
+body {
+	height: 100%;
+	font-family: Geneva, Arial, Helvetica, sans-serif;
+	font-size: 14px;
+}
+.hidden {
+	display: none;
+}
+.overscreen {
+	position: fixed;
+	top: 0;
+	bottom: 100%;
+	overflow-y: scroll;
+	height: 100%;
+}
+.controls {
+	margin-top: 10px;
+}
+.controls:after {
+	content:".......................................................................";
+	letter-spacing: 4px;
+	display: block;
+	width: inherit;
+	overflow: hidden;
+}
+.controls .controls_container{
+	padding: 0 10px;
+}
+#subjects {
+	left: 0;
+	right: 200px;
+	width: 220px;
+}
+#content {
+	left: 220px;
+	right: 100%;
+	width: 100%
+}
+#subjects_container {
+	
+}
+.subjects_item {
+	margin-top: 20px;
+	margin-bottom: 20px;
+	width: 220px;
+	cursor: pointer;
+	background-color: #FFFFFF;
+}
+.subjects_item:hover {
+	background-color: #002277;
+}
+.subjects_item:after {
+	content: ' ';
+	width: 220px;
+	border-bottom: 1px solid #000000;
+	display: block;
+	margin-top: 20px;
+}
+.subjects_item:last-child:after {
+  content: none;
+}
+
+.subjects_item .subjects_item_when {
+	float: right;
+	color: #0877db;
+}
+.subjects_item .subjects_item_head {
+	padding: 5px 10px 0;
+}
+ .subjects_item .subjects_item_body {
+ 	padding: 5px 10px 0;
+ }
+.subjects_item .subjects_item_from,
+.content_body .content_body_header .content_body_header_from, 
+.content_body .content_body_header .content_body_header_to, 
+.content_body .content_body_header .content_body_header_recieved,
+.content_body .content_body_main .content_body_main_subject {
+	font-weight: bold;
+}
+.content_body .content_body_header .content_body_header_from:before {
+	content: 'From: ';
+	font-weight: normal;
+}
+.content_body .content_body_header .content_body_header_recieved:before {
+	content: 'Recieved: ';
+	font-weight: normal;
+}
+.content_body .content_body_header .content_body_header_to:before {
+	content: 'To: ';
+	font-weight: normal;
+}
+.content_body .content_body_header:after {
+	content: ' ';
+	display: block;
+	border-bottom: 1px solid #000000;
+	margin-top: 10px;
+}
+.content_body .content_body_main .content_body_main_subject:before {
+	content: 'Subject: ';
+	font-weight: normal;
+}
+.content_body .content_body_header,
+.content_body .content_body_main {
+	padding: 10px;
+}

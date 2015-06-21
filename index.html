@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="reset.css" type="text/css" media="all"/>
+<link rel="stylesheet" href="style.css" type="text/css" media="all"/>
+<title>
+Fyber E-mail Client
+</title>
+</head>
+<body>
+	<div id='subjects' class='overscreen'>
+		<div class='controls'>
+			<div class='controls_container'>
+				<input type='checkbox' id='showRead'><label>Show read</label>
+			</div>
+		</div>
+		<div id='subjects_container'>
+		</div>
+	</div>
+	</div>
+	<div id='content' class='overscreen'>
+		<div class='content-body__noselect'>
+			Nothing selected
+		</div>
+		<div class='content_body hidden'>
+			<div class='content_body_header'>
+				<div class='content_body_header_from'></div>
+				<div class='content_body_header_to'></div>
+				<div class='content_body_header_recieved'></div>
+			</div>
+			<div class='content_body_separator'>
+			
+			</div>
+			<div class='content_body_main'>
+				<div class='content_body_main_subject'>
+				</div>
+				<div class='content_body_main_text'>
+				</div>
+			</div>
+		</div>
+	</div>
+<script src="under.js" type="text/javascript"></script>
+<script src="emailviewer.js" type="text/javascript"></script>
+<script type="text/javascript">
+(function () {
+	_.ajax('data.json', {getJSON: true}, function(data) {
+		window.ololo = new EmailViewer(JSON.parse(data), 'subjects_container', 'content');	
+	});
+})();
+</script>
+</body>
+</html>
