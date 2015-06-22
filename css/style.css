@@ -9,7 +9,9 @@ body {
 }
 .page {
     height: 100%;
+    width: 100%;
 	position: fixed;
+	min-width: 620px;
 }
 .hidden {
 	display: none;
@@ -33,12 +35,11 @@ body {
 }
 #subjects {
 	width: 20%;
-	min-width: 250px;
+	min-width: 222px;
 	float: left;
 }
-#content {
-	float: left;
-	width: 80%;
+#content {	
+
 }
 #subjects_container {
 }
@@ -107,7 +108,28 @@ body {
 	content: 'Subject: ';
 	font-weight: normal;
 }
-.content_body .content_body_header,
 .content_body .content_body_main {
 	padding: 10px;
+}
+.content_body .content_body_header {
+	padding: 10px 0;
+}
+.content_body .content_body_header div {
+	padding: 0 10px;
+}
+
+/* CSS Animation*/
+@keyframes fadeIn {
+	0% { opacity: 0; }
+	100% { opacity: 1; }
+}
+@keyframes fadeOut {
+	0% { opacity: 1; }
+	100% { opacity: 0; }
+}
+.fadeIn {
+	animation: fadeIn 0.5s both ease;
+}
+.fadeOut{
+	animation: fadeOut 0.5s both ease;
 }

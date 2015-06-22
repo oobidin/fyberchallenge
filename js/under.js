@@ -1,4 +1,5 @@
 window._ = {
+	ANIMATION_TIME: 3000,
 	dom: {
 		get: function(id) {
 			return document.getElementById(id);
@@ -41,8 +42,22 @@ window._ = {
 	hide: function(id) {
 		this.removeClass(id, 'hidden')
 	},
-	fade: function() {
-		
+	fade: function(id, direction, done) {
+		var elem = (id instanceof String) ? this.dom.get(id): id;
+		elem.style.opacity = direction == 'in' ? 0 : 1;
+		function _fade() {
+			var val = parseFloat(elem.style.opacity),
+				condition = direction == 'in' ? (val += .1) < 1 : (val -= .1) >= 0;
+			if (condition) {
+			  elem.style.opacity = val;
+			  setTimeout(_fade, this.ANIMATION_TIME/100);
+			} else {
+				elem.style.display = direction == 'in' ? 'block' : 'none';
+				if (done)
+					done();
+			}
+		 };
+		setTimeout(_fade, this.ANIMATION_TIME/100);
 	},
 	/*formats: {
 		date: function(date) {

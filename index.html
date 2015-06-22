@@ -41,17 +41,15 @@ Fyber E-mail Client
 <script src="js/emailviewer.js" type="text/javascript"></script>
 <script type="text/javascript">
 (function () {
-	var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor),
-	    isSafari = /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor),
-		dataJSON;
+	var isWebKit = 'WebkitAppearance' in document.documentElement.style || (window.opera);
 	function start(data) {
-		new EmailViewer(data, 'subjects_container', 'content');	
+		new EmailViewer(data, 'subjects_container', 'content', 'showRead');	
 	}
-	if (!isChrome && !isSafari)
+	if (!isWebKit)
 		_.ajax('data.json', {getJSON: true}, function(data) {
 			start(JSON.parse(data));
 		});
-	else { // Hack mode on. Reason: in WebKit browsers HTML-page can't access to load local file with default settings.
+	else { // Hack mode on. Reason: in WebKit browsers with default settings HTML-page can't access to load local file.
 		var script = document.createElement('script');
 		script.src = 'js/data.json.js';
 		document.body.appendChild(script);

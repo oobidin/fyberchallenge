@@ -1,36 +1,45 @@
-
-function EmailViewer(arr, masterView, detailView) {
+function EmailViewer(arr, masterView, detailView, readShower) {
 	this.data = arr.sort(function(a, b) {
 		return b.order - a.order;
 	});
 	
 	this.masterView = _.dom.get(masterView);
 	this.detailView = _.dom.get(detailView);
-	this.curent = undefined;
+	this.readShower = _.dom.get(readShower);
 	
 	this.init = function () {
+		var self = this;
+		if ('onpropertychange' in this.readShower)
+			this.readShower.addEventListener('propertychange', function () {
+				self.showRead(this.checked)
+			});
+		else
+			this.readShower.addEventListener('change', function () {
+				self.showRead(this.checked)
+			});
 		for (var i = 0; i < this.data.length; i++)
 			this.masterView.appendChild(this.createElem(this.data[i]));
 	};
 	
-	/*this.drawMasters(criteria) {
-		var read = criteria.read,
-		    dom = this.masterView;
-		
-		//
-		clearMasters();
-		//
-		
-		for (var i = 0; i < this.data.length; i++)
-			if (checkCriteria)
-				dom.appendChild(this.createElem(data[i]));
-	}*/
-	// Дописать!!!
 	this.createDateElem = function(date) {
 		
 	};
 	
-	
+	this.showRead = function(val) {
+		var self = this;
+		_.fade(this.masterView, 'out', function () {
+			for (var i = 0; i < self.data.length; i++) {
+				var elem = self.data[i],
+					domElem = _.dom.get('letter' + elem.index);
+
+				if (val && !elem.read)
+					_.dom.addClass(domElem, 'hidden');
+				else
+					_.dom.removeClass(domElem, 'hidden');
+				_.fade(self.masterView, 'in');
+			}
+		});
+	};
 	
 	this.createElem = function(elem) {
 		var div = _.dom.create('div'),
@@ -80,18 +89,24 @@ function EmailViewer(arr, masterView, detailView) {
 			recieved = content_body_header.getElementsByClassName('content_body_header_recieved')[0],
 			content_body_main = content_body.getElementsByClassName('content_body_main')[0],
 			subject = content_body_main.getElementsByClassName('content_body_main_subject')[0],
-			text = content_body_main.getElementsByClassName('content_body_main_text')[0];
-		
-		if (_.dom.hasClass(content_body, 'hidden')) {
-			_.dom.addClass(this.detailView.getElementsByClassName('content-body__noselect')[0], 'hidden');
-			_.dom.removeClass(content_body, 'hidden')
-		}
-		from.textContent = [elem.fromName, ' (' ,elem.fromEmail, ')'].join('');
-		to.textContent = 'You';
-		var dateReceived = new Date(elem.dateReceived);
-		recieved.textContent = [dateReceived.getMonth(), dateReceived.getDay() + 'st', dateReceived.getFullYear()].join(' ');
-		subject.textContent = elem.subject;
-		text.textContent = elem.content;
+			text = content_body_main.getElementsByClassName('content_body_main_text')[0],
+			self = this;
+
+		_.fade(content_body, 'out', function() {
+			if (_.dom.hasClass(content_body, 'hidden')) {
+				_.dom.addClass(self.detailView.getElementsByClassName('content-body__noselect')[0], 'hidden');
+				_.dom.removeClass(content_body, 'hidden');
+			}
+
+			from.textContent = [elem.fromName, ' (' ,elem.fromEmail, ')'].join('');
+			to.textContent = 'You';
+			var dateReceived = new Date(elem.dateReceived);
+			recieved.textContent = [dateReceived.getMonth(), dateReceived.getDay() + 'st', dateReceived.getFullYear()].join(' ');
+			subject.textContent = elem.subject;
+			text.textContent = elem.content;
+			_.fade(content_body, 'in');
+		});
+
 	};
 	
 	this.init();
