@@ -2,6 +2,16 @@
 *  Under.js - mini JS library
 **/
 
+
+if (!Array.prototype.indexOf) {
+	Array.prototype.indexOf = function(obj, start) {
+    	for (var i = (start || 0), j = this.length; i < j; i++)
+			if (this[i] === obj)
+				return i;
+		return -1;
+	};
+}
+
 function _(e) {
 	return new _.wrapper(e);
 }
@@ -13,7 +23,7 @@ _.wrapper = function (e) {
     var elem = document.getElementById(e);
     return _(elem);
 };
-_.ajax = function(url, opts, done) {
+_.ajax = function(url, done) {
 	function getXmlHttp() {
 	  var xmlhttp;
 	  try {
@@ -30,10 +40,6 @@ _.ajax = function(url, opts, done) {
 	  return xmlhttp;
 	}
 	var xmlhttp = getXmlHttp();
-	if (opts) {
-		if (opts.getJSON)
-			xmlhttp.overrideMimeType("application/json")
-	}
 	xmlhttp.open('GET', url, false);
 	xmlhttp.send(null);
 	if(xmlhttp.status == 200)
@@ -121,19 +127,34 @@ _.ANIMATION_TIME = 3000;
 _.wrapper.prototype = _.prototype = {
 	constructor: _,
 	addClass: function(className) {
-		var classes = this[0].classList;
-		if (!classes.contains(className))
-			classes.add(className)
+		if (this[0].classList) {
+			var classes = this[0].classList;
+			if (!classes.contains(className))
+				classes.add(className)
+		} else {
+			var classes = this[0].className.split(' ');
+			if (classes.indexOf(className) == -1)
+				classes.push(className);
+			this[0].className = classes.join(' ')
+		}
 		return this;
 	},
 	removeClass: function(className) {
-		var classes = this[0].classList;
-		if (classes.contains(className))
-			classes.remove(className)
-		return this;
+		if (this[0].classList) {
+			var classes = this[0].classList;
+			if (classes.contains(className))
+				classes.remove(className)
+			return this;
+		} else {
+			var classes = this[0].className.split(' '),
+				inx = classes.indexOf(className);
+			if (inx > -1)
+				classes.splice(inx, 1);
+			this[0].className = classes.join(' ')
+		}
 	},
 	hasClass: function(className) {
-		return this[0].classList.contains(className)
+		return this[0].classList ? this[0].classList.contains(className) : this[0].className.indexOf(className) > -1;
 	},
 	show: function() {
 		this.removeClass('hidden');
@@ -167,8 +188,8 @@ _.wrapper.prototype = _.prototype = {
 		_fade();
 	},
 	child: function(criteria) { // Now I need just search first child by class
-		if (criteria.class)
-			return _(this[0].getElementsByClassName(criteria.class)[0]);
+		if (criteria['class'])
+			return _(this[0].getElementsByClassName(criteria['class'])[0]);
 		return null;
 	},
 	append: function(child) {
@@ -188,11 +209,17 @@ _.wrapper.prototype = _.prototype = {
 		switch(eventName) {
 			case 'change':
 				if (elem.tagName == 'INPUT' && elem.type == 'checkbox' && 'onpropertychange' in elem)
-					elem.addEventListener('propertychange', callback);
+					elem.onpropertychange =  callback;
 				else
 					elem.addEventListener('change', callback);
 			break;
 			default:
+				if (elem.addEventListener)
+				  elem.addEventListener(eventName, callback, false);
+			   else if (elem.attachEvent)
+				  elem.attachEvent('on' + eventName, callback);
+			   else
+				  elem[evnt] = func;
 				elem.addEventListener(eventName, callback);
 			break;
 		}

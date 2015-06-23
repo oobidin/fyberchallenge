@@ -100,19 +100,19 @@ function EmailViewer(data, masterView, detailView, unreadShower) {
 	
 	this.showDetail = function(id) {
 		var elem = this.getElem(id),
-			content_body = this.detailView.child({ class: 'content_body' }),
-			content_body_header = content_body.child({ class: 'content_body_header' }),
-			from = content_body_header.child({ class: 'content_body_header_from' }),
-			to = content_body_header.child({ class: 'content_body_header_to' }),
-			recieved = content_body_header.child({ class: 'content_body_header_recieved' }),
-			content_body_main = content_body.child({ class: 'content_body_main' }),
-			subject = content_body_main.child({ class: 'content_body_main_subject' }),
-			text = content_body_main.child({ class: 'content_body_main_text' }),
+			content_body = this.detailView.child({ 'class': 'content_body' }),
+			content_body_header = content_body.child({ 'class': 'content_body_header' }),
+			from = content_body_header.child({ 'class': 'content_body_header_from' }),
+			to = content_body_header.child({ 'class': 'content_body_header_to' }),
+			recieved = content_body_header.child({ 'class': 'content_body_header_recieved' }),
+			content_body_main = content_body.child({ 'class': 'content_body_main' }),
+			subject = content_body_main.child({ 'class': 'content_body_main_subject' }),
+			text = content_body_main.child({ 'class': 'content_body_main_text' }),
 			self = this;
 		
 		content_body.fade('out', function() {
 			if (content_body.hasClass('hidden')) {
-				self.detailView.child({ class: 'content_body__noselect' }).addClass('hidden');
+				self.detailView.child({ 'class': 'content_body__noselect' }).addClass('hidden');
 				content_body.removeClass('hidden');
 			}
 
