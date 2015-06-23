@@ -1,73 +1,91 @@
-function EmailViewer(arr, masterView, detailView, readShower) {
-	this.data = arr.sort(function(a, b) {
-		return b.order - a.order;
-	});
-	
-	this.masterView = _.dom.get(masterView);
-	this.detailView = _.dom.get(detailView);
-	this.readShower = _.dom.get(readShower);
+/**
+*	EmailViewer - module for 
+**/
+
+function EmailViewer(data, masterView, detailView, unreadShower) {
+	this.masterView = _(masterView);
+	this.detailView = _(detailView);
+	this.unreadShower = _(unreadShower);
+	this.data = data;
 	
 	this.init = function () {
-		var self = this;
-		if ('onpropertychange' in this.readShower)
-			this.readShower.addEventListener('propertychange', function () {
-				self.showRead(this.checked)
-			});
-		else
-			this.readShower.addEventListener('change', function () {
-				self.showRead(this.checked)
-			});
-		for (var i = 0; i < this.data.length; i++)
-			this.masterView.appendChild(this.createElem(this.data[i]));
+		var self = this,
+			curDate = new Date().getTime();
+		
+		this.unreadShower.on('change', function () {
+			self.showUnread(this.checked)
+		});
+		
+		this.data.sort(function(a, b) {
+			return b.dateReceived - a.dateReceived;
+		});
+		
+		var prevDate = {
+			year: 0,
+			month: 0,
+			day: 0
+		};
+		for (var i = 0; i < this.data.length; i++) {
+			var dataElem = this.data[i],
+				date = dataElem.dateReceived,
+				dateObj = new Date(date * 1000),
+				day = dateObj.getDate(),
+				month = dateObj.getMonth(),
+				year = dateObj.getFullYear();
+		
+			if (prevDate.year != year || prevDate.month != month || prevDate.day != day) {
+				this.masterView.append(this.createDateElem(date));
+				prevDate.year = year;
+				prevDate.month = month;
+				prevDate.day = day;
+			}
+			
+			this.masterView.append(this.createElem(this.data[i]));
+		}
 	};
 	
 	this.createDateElem = function(date) {
-		
+		return _.create('div')
+				.addClass('subjects_item__date')
+				.append(
+					_.create('div').addClass('subjects_item_body')
+					 .text(_.formats.dateNum(date))
+				);
 	};
 	
-	this.showRead = function(val) {
+	this.showUnread = function(val) {
 		var self = this;
-		_.fade(this.masterView, 'out', function () {
+		this.masterView.fade('out', function () {
 			for (var i = 0; i < self.data.length; i++) {
 				var elem = self.data[i],
-					domElem = _.dom.get('letter' + elem.index);
+					domElem = _('letter' + elem.index);
 
 				if (val && !elem.read)
-					_.dom.addClass(domElem, 'hidden');
+					domElem.addClass('hidden');
 				else
-					_.dom.removeClass(domElem, 'hidden');
-				_.fade(self.masterView, 'in');
+					domElem.removeClass('hidden');
+				self.masterView.fade('in');
 			}
 		});
 	};
 	
 	this.createElem = function(elem) {
-		var div = _.dom.create('div'),
-			div_head = _.dom.create('div'),
-			from = _.dom.create('span'),
-			when = _.dom.create('span'),
-			div_body = _.dom.create('div'),
+		var div = _.create('div'),
+			div_head = _.create('div'),
+			from = _.create('span'),
+			when = _.create('span'),
+			div_body = _.create('div'),
 			self = this;
 		
-		function _getAgo(time) {
-			var delta = new Date(new Date().getTime());
-			return [delta.getDay() ? delta.getDay() + ' days' : delta.getHours() ? delta.getHours() + ' hours' : delta.getMinutes() ? delta.getMinutes() + ' min' : delta.getSeconds() + ' sec', 'ago'].join(' ');
-		}
+		div.addClass('subjects_item').id(['letter', elem.index].join(''));
+		from.addClass('subjects_item_from');
+		when.addClass('subjects_item_when');
+		from.text(elem.fromName);
+		when.text(_.formats.dateAgo(elem.dateReceived));
+		div_body.addClass('subjects_item_body').text(elem.subject || '(no subject)');
+		div_head.addClass('subjects_item_head').append(from).append(when);
 		
-		div.classList.add('subjects_item');
-		div.id = ['letter', elem.index].join('');
-		div_head.classList.add('subjects_item_head');
-		div_body.classList.add('subjects_item_body');
-		from.classList.add('subjects_item_from');
-		when.classList.add('subjects_item_when');
-		from.textContent = elem.fromName;
-		when.textContent = _getAgo(elem.dateReceived);
-		div_body.textContent = elem.subject || '(no subject)';
-		div_head.appendChild(from);
-		div_head.appendChild(when);
-		div.appendChild(div_head);
-		div.appendChild(div_body);
-		div.addEventListener('click', function() {
+		div.append(div_head).append(div_body).on('click', function() {
 			self.showDetail(this.id.substring(6));
 		});
 		return div;
@@ -82,31 +100,30 @@ function EmailViewer(arr, masterView, detailView, readShower) {
 	
 	this.showDetail = function(id) {
 		var elem = this.getElem(id),
-			content_body = this.detailView.getElementsByClassName('content_body')[0],
-			content_body_header = content_body.getElementsByClassName('content_body_header')[0],
-			from = content_body_header.getElementsByClassName('content_body_header_from')[0],
-			to = content_body_header.getElementsByClassName('content_body_header_to')[0],
-			recieved = content_body_header.getElementsByClassName('content_body_header_recieved')[0],
-			content_body_main = content_body.getElementsByClassName('content_body_main')[0],
-			subject = content_body_main.getElementsByClassName('content_body_main_subject')[0],
-			text = content_body_main.getElementsByClassName('content_body_main_text')[0],
+			content_body = this.detailView.child({ class: 'content_body' }),
+			content_body_header = content_body.child({ class: 'content_body_header' }),
+			from = content_body_header.child({ class: 'content_body_header_from' }),
+			to = content_body_header.child({ class: 'content_body_header_to' }),
+			recieved = content_body_header.child({ class: 'content_body_header_recieved' }),
+			content_body_main = content_body.child({ class: 'content_body_main' }),
+			subject = content_body_main.child({ class: 'content_body_main_subject' }),
+			text = content_body_main.child({ class: 'content_body_main_text' }),
 			self = this;
-
-		_.fade(content_body, 'out', function() {
-			if (_.dom.hasClass(content_body, 'hidden')) {
-				_.dom.addClass(self.detailView.getElementsByClassName('content-body__noselect')[0], 'hidden');
-				_.dom.removeClass(content_body, 'hidden');
+		
+		content_body.fade('out', function() {
+			if (content_body.hasClass('hidden')) {
+				self.detailView.child({ class: 'content_body__noselect' }).addClass('hidden');
+				content_body.removeClass('hidden');
 			}
 
-			from.textContent = [elem.fromName, ' (' ,elem.fromEmail, ')'].join('');
-			to.textContent = 'You';
+			from.text([elem.fromName, ' (' , elem.fromEmail, ')'].join(''));
+			to.text('You');
 			var dateReceived = new Date(elem.dateReceived);
-			recieved.textContent = [dateReceived.getMonth(), dateReceived.getDay() + 'st', dateReceived.getFullYear()].join(' ');
-			subject.textContent = elem.subject;
-			text.textContent = elem.content;
-			_.fade(content_body, 'in');
+			recieved.text(_.formats.date(elem.dateReceived));
+			subject.text(elem.subject);
+			text.text(_.formats.pre(elem.content));
+			content_body.fade('in');
 		});
-
 	};
 	
 	this.init();
