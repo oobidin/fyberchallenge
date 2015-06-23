@@ -12,15 +12,15 @@ Fyber E-mail Client
 		<div id='subjects' class='overscreen'>
 			<div class='controls'>
 				<div class='controls_container'>
-					<input type='checkbox' id='showRead'><label>Show read</label>
+					<input type='checkbox' id='show_unread'><label>Show unread</label>
 				</div>
 			</div>
 			<div id='subjects_container'>
 			</div>
 		</div>
 		<div id='content' class='overscreen'>
-			<div class='content-body__noselect'>
-				Nothing selected
+			<div class='content_body__noselect'>
+				<div>Nothing selected</div>
 			</div>
 			<div class='content_body hidden'>
 				<div class='content_body_header'>
@@ -43,7 +43,7 @@ Fyber E-mail Client
 (function () {
 	var isWebKit = 'WebkitAppearance' in document.documentElement.style || (window.opera);
 	function start(data) {
-		new EmailViewer(data, 'subjects_container', 'content', 'showRead');	
+		new EmailViewer(data, 'subjects_container', 'content', 'show_unread');	
 	}
 	if (!isWebKit)
 		_.ajax('data.json', {getJSON: true}, function(data) {

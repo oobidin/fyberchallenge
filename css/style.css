@@ -4,6 +4,7 @@ html, body {
 body {
 	font-family: Geneva, Arial, Helvetica, sans-serif;
 	font-size: 14px;
+	line-height: 1.2em;
 	margin: 0;
 	padding: 0;
 }
@@ -38,16 +39,14 @@ body {
 	min-width: 222px;
 	float: left;
 }
-#content {	
-
-}
-#subjects_container {
-}
 .subjects_item {
 	padding-top: 20px;
 	cursor: pointer;
 	background-color: #FFFFFF;
 	transition: background-color 0.6s ease;
+}
+.subjects_item__date {
+	padding-top: 10px;
 }
 .subjects_item:hover {
 	background-color: #fefddc;
@@ -56,12 +55,17 @@ body {
 	content: ' ';
 	border-bottom: 1px solid #000000;
 	display: block;
-	padding-top: 20px;
+	padding-top: 30px;
+}
+.subjects_item__date:after {
+	content: ' ';
+	border-bottom: 1px solid #000000;
+	display: block;
+	padding-top: 10px;
 }
 .subjects_item:last-child:after {
   content: none;
 }
-
 .subjects_item .subjects_item_when {
 	float: right;
 	color: #0877db;
@@ -69,15 +73,27 @@ body {
 .subjects_item .subjects_item_head {
 	padding: 5px 10px 0;
 }
- .subjects_item .subjects_item_body {
+.subjects_item .subjects_item_body,
+.subjects_item__date .subjects_item_body{
  	padding: 5px 10px 0;
  }
-
 .content_body .content_body_main .content_body_main_subject {
-	margin: 10px 0;
+	font-size: 2em;
+	margin: 10px 0 20px;
 }
-.content_body .content_body_main .content_body_main_text {
-	
+.content_body__noselect {
+	height: 100%;
+	width: 100%;
+	position: relative;
+}
+.content_body__noselect div {
+	position: absolute;
+	top: 50%;
+	margin-top: -1.5em;
+    font-size: 1.5em;
+    font-style: italic;
+	width: 100%;
+    text-align: center;
 }
 .subjects_item .subjects_item_from,
 .content_body .content_body_header .content_body_header_from, 
@@ -108,14 +124,24 @@ body {
 	content: 'Subject: ';
 	font-weight: normal;
 }
+.content_body .content_body_main .content_body_main_text {
+	white-space: pre-wrap;
+}
+.content_body .content_body_main .content_body_main_text span {
+	display: inline-block;
+	margin: 0.5em 0;
+}
 .content_body .content_body_main {
-	padding: 10px;
+	padding: 0 10px;
 }
 .content_body .content_body_header {
 	padding: 10px 0;
 }
 .content_body .content_body_header div {
-	padding: 0 10px;
+	padding: 0 10px 5px;
+}
+.content_body .content_body_header div:last-child{
+	padding-bottom: 0;
 }
 
 /* CSS Animation*/
