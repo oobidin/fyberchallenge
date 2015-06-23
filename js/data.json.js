@@ -1,3 +1,7 @@
+/**
+*	Data for hack with WebKit browsers
+**/
+
 window.emails = [
   {
     "content": "Laboris ea eiusmod consectetur Lorem dolor enim nostrud aliquip. Nostrud mollit eiusmod quis esse deserunt officia. Sunt incididunt enim ullamco anim Lorem non deserunt ut deserunt consectetur nisi esse labore. Laboris in elit exercitation laborum mollit. Amet aute sint laborum amet aute anim. Minim velit eiusmod sint elit deserunt nulla in voluptate commodo cillum laborum consectetur sint.\r\nIrure consequat ad ipsum fugiat labore consequat irure. Id et non qui ea sit sint voluptate exercitation dolore fugiat. Eu sit ex tempor qui tempor adipisicing enim. Culpa sunt velit laboris commodo enim ea laborum adipisicing nulla dolor mollit.\r\nSit elit nisi commodo ullamco deserunt non dolore deserunt ea sit commodo reprehenderit in. Nostrud qui sint aliqua tempor est enim. Mollit aliqua eiusmod nostrud ad esse ex eiusmod duis eu velit est Lorem fugiat. Reprehenderit ex eu consequat Lorem cillum in amet fugiat occaecat non ipsum minim pariatur. Esse excepteur consequat do eu duis cupidatat minim minim laborum. Elit excepteur magna cupidatat incididunt ea enim.\r\n",
