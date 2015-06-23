@@ -1,5 +1,5 @@
 /**
-*	EmailViewer - module for 
+*	EmailViewer - module for viewing emails
 **/
 
 function EmailViewer(data, masterView, detailView, unreadShower) {
@@ -60,7 +60,7 @@ function EmailViewer(data, masterView, detailView, unreadShower) {
 				var elem = self.data[i],
 					domElem = _('letter' + elem.index);
 
-				if (val && !elem.read)
+				if (val && elem.read)
 					domElem.addClass('hidden');
 				else
 					domElem.removeClass('hidden');
@@ -77,7 +77,9 @@ function EmailViewer(data, masterView, detailView, unreadShower) {
 			div_body = _.create('div'),
 			self = this;
 		
-		div.addClass('subjects_item').id(['letter', elem.index].join(''));
+		div.id(['letter', elem.index].join('')).addClass('subjects_item');
+		if (!elem.read)
+			div.addClass('subjects_item__unread');
 		from.addClass('subjects_item_from');
 		when.addClass('subjects_item_when');
 		from.text(elem.fromName);
@@ -86,7 +88,10 @@ function EmailViewer(data, masterView, detailView, unreadShower) {
 		div_head.addClass('subjects_item_head').append(from).append(when);
 		
 		div.append(div_head).append(div_body).on('click', function() {
-			self.showDetail(this.id.substring(6));
+			var id = this.id.substring(6);
+			_(this).removeClass('subjects_item__unread');
+			self.getElem(id).read = true;
+			self.showDetail(id);
 		});
 		return div;
 	};

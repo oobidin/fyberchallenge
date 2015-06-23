@@ -45,6 +45,10 @@ body {
 	background-color: #FFFFFF;
 	transition: background-color 0.6s ease;
 }
+.subjects_item__unread {
+	background-color: #D1D1D1;
+	transition: background-color 0.6s ease;
+}
 .subjects_item__date {
 	padding-top: 10px;
 }
